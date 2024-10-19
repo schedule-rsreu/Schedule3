@@ -19,7 +19,6 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-select": "^5.8.0",
-    "react-top-loading-bar": "^2.3.1",
     "sass": "^1.77.8",
     "schedule3": "file:",
     "telegram-webapps-types": "^1.0.5",
