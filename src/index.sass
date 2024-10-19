@@ -1,0 +1,325 @@
+@tailwind base
+@tailwind components
+@tailwind utilities
+
+:root 
+  --background: var(--tg-theme-secondary-bg-color)
+  --primary: var(--tg-theme-bg-color)
+  --secondary: var(--tg-theme-secondary-bg-color)
+  --text-primary: var(--tg-theme-text-color)
+  --accent: hsla(213, 99%, 65%, 1)
+  --radius: 10px
+  --spinner: rgba(0, 0, 0, 0.1)
+
+html 
+  font-size: 62.5%
+  scroll-behavior: smooth
+
+body
+  font-family: "Montserrat", sans-serif
+  font-weight: 300
+  background-color: var(--background)
+  user-select: none
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  scrollbar-width: none
+  
+* 
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+::-webkit-scrollbar
+  display: none
+
+@media screen and (prefers-reduced-motion: reduce) 
+  html 
+    scroll-behavior: auto
+
+@media (max-width: 279px)
+  html
+    font-size: 42%
+
+  .course
+    height: 5.6rem !important
+
+@media (min-width: 280px)
+  html
+    font-size: 44%
+  
+  .course
+    height: 5.3rem !important
+  
+@media (min-width: 290px)
+  html
+    font-size: 46%
+
+  .course
+    height: 5.1rem !important
+
+@media (min-width: 300px)
+  html
+    font-size: 47%
+
+@media (min-width: 310px)
+  html
+    font-size: 50%
+
+  .course
+    height: 5rem !important
+
+@media (min-width: 320px)
+  html
+    font-size: 51%
+
+@media (min-width: 330px)
+  html
+    font-size: 53%
+
+@media (min-width: 340px)
+  html
+    font-size: 54%
+
+@media (min-width: 350px)
+  html
+    font-size: 56%
+
+@media (min-width: 360px)
+  html
+    font-size: 58%
+
+@media (min-width: 370px)
+  html
+    font-size: 59%
+
+@media (min-width: 380px)
+  html
+    font-size: 61%
+
+@media (min-width: 390px)
+  html
+    font-size: 62.5%
+
+@media (min-width: 410px)
+  html
+    font-size: 65%
+
+.button
+  position: relative
+  transition: all .1s
+  top: 0
+  
+  &:active
+    top: .2rem
+
+.preloader 
+  border: .45rem solid var(--spinner)
+  border-left-color: var(--accent)
+  border-radius: 50%
+  width: 3rem
+  height: 3rem
+  animation: spin 1s linear infinite
+
+.loader 
+  width: 100%
+  height: .2rem
+  background-color: transparent
+  overflow: hidden
+
+.loader::before 
+  content: ""
+  display: block
+  width: 100%
+  height: 100%
+  background-color: var(--accent)
+  animation: move 1s linear infinite
+
+@keyframes move 
+  0% 
+    transform: translateX(-100%)
+  
+  100% 
+    transform: translateX(100%)
+
+@keyframes spin
+  100%
+    transform: rotate(360deg)
+
+@keyframes dropDownMenu
+  0%
+    opacity: 0
+    transform: scaleY(0)
+    transform-origin: top
+
+  50% 
+    opacity: 0.5
+
+  100%
+    opacity: 1
+    transform: scaleY(1)
+    transform-origin: top
+
+// Стили для кастомного селекта факультетов
+.department-select
+  &-container > div
+    outline: none !important
+    box-shadow: none !important
+
+  &__placeholder
+    color: var(--text-primary) !important
+  
+  &__control
+    display: flex !important
+    align-items: center !important
+    font-size: 1.5rem !important
+    background-color: var(--primary) !important
+    border: none !important
+    border-radius: 0 !important
+    border: none !important
+    box-shadow: none !important
+    height: 5rem !important
+    padding-left: 1rem !important
+    
+    &:hover
+      border: none !important
+
+  &__menu
+    margin-top: 0 !important
+    background-color: var(--accent) !important
+    border: none !important
+    box-shadow: none !important
+    color: white !important
+    padding: 0 !important
+    border-bottom-left-radius: 1rem !important
+    border-bottom-right-radius: 1rem !important
+    border-top-right-radius: 0 !important
+    border-top-left-radius: 0 !important
+    animation: dropDownMenu .15s ease-in-out
+
+  &__menu-list
+    max-height: 21rem !important
+    overflow-y: auto !important
+    -webkit-overflow-scrolling: touch !important
+
+  &__option
+    cursor: pointer !important
+    display: flex !important
+    justify-content: center !important
+    color: white !important
+    padding: "1.5rem 2.3rem" !important
+    font-size: 1.5rem !important
+    font-weight: normal !important
+    border-bottom: .1rem solid #FFFFFF19 !important
+    
+    &--is-focused
+      background-color: var(--accent) !important
+
+    &:hover
+      background-color: white !important
+      color: var(--accent) !important
+      border-radius: .5rem !important
+
+  &__value-container
+    font-weight: normal !important
+    padding: 0 1rem !important
+    cursor: pointer !important
+    font-size: 1.5rem !important
+    padding: 0 !important
+
+  &__single-value
+    color: var(--text-primary) !important
+
+  &__indicator-separator
+    display: none !important
+
+  &__indicators
+    cursor: pointer !important
+
+  &__indicator 
+    color: var(--accent) !important
+
+// Кастомные стили групп
+.group-select
+  &-container > div
+    outline: none !important
+    box-shadow: none !important
+
+  &__placeholder
+    color: var(--text-primary) !important
+  
+  &__control
+    display: flex !important
+    align-items: center !important
+    font-size: 1.5rem !important
+    background-color: var(--primary) !important
+    border: none !important
+    border-top-right-radius: 1rem !important 
+    border-top-left-radius: 0 !important 
+    border-bottom-right-radius: 0 !important 
+    border-bottom-left-radius: 0 !important 
+    border: none !important
+    box-shadow: none !important
+    height: 5rem !important
+    padding-left: 1rem !important
+    
+    &:hover
+      border: none !important
+
+  &__menu
+    margin-top: 0 !important
+    background-color: var(--accent) !important
+    border: none !important
+    box-shadow: none !important
+    color: white !important
+    padding: 0 !important
+    border-bottom-left-radius: 1rem !important
+    border-bottom-right-radius: 1rem !important
+    border-top-right-radius: 0 !important
+    border-top-left-radius: 0 !important
+    animation: dropDownMenu .15s ease-in-out
+
+  &__menu-list
+    max-height: 28.4rem !important
+    overflow-y: auto !important
+    -webkit-overflow-scrolling: touch !important
+
+    &::-webkit-scrollbar
+      display: none
+
+  &__option
+    cursor: pointer !important
+    display: flex !important
+    justify-content: center !important
+    color: white !important
+    padding: "1.5rem 2.3rem" !important
+    font-size: 1.5rem !important
+    font-weight: normal !important
+    border-bottom: .1rem solid #FFFFFF19 !important
+    
+    &--is-focused
+      background-color: var(--accent) !important
+
+    &:hover
+      background-color: white !important
+      color: var(--accent) !important
+      border-radius: .5rem !important
+
+  &__value-container
+    font-weight: normal !important
+    padding: 0 1rem !important
+    cursor: pointer !important
+    font-size: 1.5rem !important
+    padding: 0 !important
+
+  &__single-value
+    color: var(--text-primary) !important
+
+  &__indicator-separator
+    display: none !important
+
+  &__indicators
+    cursor: pointer !important
+
+  &__indicator 
+    color: var(--accent) !important
