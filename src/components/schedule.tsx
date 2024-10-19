@@ -35,7 +35,7 @@ export const Schedule: React.FC = () => {
 
   React.useEffect(() => {
     if (
-      schedule.length > 0 &&
+      schedule?.length > 0 &&
       selectedDayEn &&
       selectedWeekEn &&
       daysOfTheWeekEn[selectedDayEn] === currentDay &&
@@ -96,7 +96,7 @@ export const Schedule: React.FC = () => {
       selectedGroup &&
       !isLoading &&
       !error &&
-      schedule.length > 0
+      schedule?.length > 0
         ? schedule.map((pair, index) => (
             <Pair
               key={index}
@@ -110,7 +110,7 @@ export const Schedule: React.FC = () => {
           selectedGroup &&
           !isLoading &&
           !error &&
-          schedule.length === 0 && (
+          schedule?.length === 0 && (
             <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem] no-schedule">
               <h2 className="font-normal text-[1.5rem]">
                 В этот день нет занятий

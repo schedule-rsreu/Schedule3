@@ -25,7 +25,7 @@ export const useCurrentPairIndex = (schedule: IPair[], currentTime: string) => {
     return -1;
   }
 
-  for (let index = 0; index < schedule.length; index++) {
+  for (let index = 0; index < schedule?.length; index++) {
     const [startTime, endTime] = schedule[index].time
       .split("-")
       .map((time) => parse(time.trim(), "HH:mm", new Date()));
