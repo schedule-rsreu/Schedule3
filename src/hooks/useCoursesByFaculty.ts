@@ -5,8 +5,9 @@ import { hoursToMilliseconds } from "../utils/hours-to-milliseconds";
 export const useCoursesByFaculty = (faculty: string, initDataRaw: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["courses", faculty],
-    queryFn: () => scheduleService.getCoursesByFaculty(faculty, initDataRaw),
-    select: (data) => data.courses,
+    queryFn: ({ signal }) =>
+      scheduleService.getCoursesByFaculty(faculty, initDataRaw, signal),
+    select: (data) => data?.courses,
     enabled: !!faculty,
     refetchOnWindowFocus: false,
     staleTime: hoursToMilliseconds(24),

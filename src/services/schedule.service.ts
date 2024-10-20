@@ -15,47 +15,79 @@ class ScheduleService {
     return data;
   }
 
-  async getCoursesByFaculty(faculty: string, initDataRaw: string) {
-    const { data } = await axios.get<ICoursesByFaculty>(
-      `${this.URL}/courses?faculty=${faculty}`,
-      {
-        headers: {
-          authorization: `tma ${initDataRaw}`,
-        },
-      }
-    );
+  async getCoursesByFaculty(
+    faculty: string,
+    initDataRaw: string,
+    signal: AbortSignal
+  ) {
+    try {
+      const { data } = await axios.get<ICoursesByFaculty>(
+        `${this.URL}/courses?faculty=${faculty}`,
+        {
+          headers: {
+            authorization: `tma ${initDataRaw}`,
+          },
+          signal,
+        }
+      );
 
-    return data;
+      return data;
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log("Course request cancelled");
+      } else {
+        throw error;
+      }
+    }
   }
 
   async getGroupsByCourseAndFaculty(
     faculty: string,
     course: number,
-    initDataRaw: string
+    initDataRaw: string,
+    signal: AbortSignal
   ) {
-    const { data } = await axios.get<IGroupsByCourseAndFaculty>(
-      `${this.URL}/groups?faculty=${faculty}&course=${course}`,
-      {
-        headers: {
-          authorization: `tma ${initDataRaw}`,
-        },
-      }
-    );
+    try {
+      const { data } = await axios.get<IGroupsByCourseAndFaculty>(
+        `${this.URL}/groups?faculty=${faculty}&course=${course}`,
+        {
+          headers: {
+            authorization: `tma ${initDataRaw}`,
+          },
+          signal,
+        }
+      );
 
-    return data;
+      return data;
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log("Group request cancelled");
+      } else {
+        throw error;
+      }
+    }
   }
 
-  async getSchedule(group: string, initDataRaw: string) {
-    const { data } = await axios.get<IScheduleByGroup>(
-      `${this.URL}/groups/${group}`,
-      {
-        headers: {
-          authorization: `tma ${initDataRaw}`,
-        },
-      }
-    );
+  async getSchedule(group: string, initDataRaw: string, signal: AbortSignal) {
+    try {
+      const { data } = await axios.get<IScheduleByGroup>(
+        `${this.URL}/groups/${group}`,
+        {
+          headers: {
+            authorization: `tma ${initDataRaw}`,
+          },
+          signal,
+        }
+      );
 
-    return data;
+      return data;
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log("Schedule request cancelled");
+      } else {
+        throw error;
+      }
+    }
   }
 }
 

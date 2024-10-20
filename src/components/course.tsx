@@ -24,7 +24,7 @@ export const Course: React.FC<IProps> = ({ className }) => {
 
   const handleCourseChange = () => {
     if (courses) {
-      if (selectedCourse < courses?.length) {
+      if (selectedCourse < courses.length) {
         setSelectedCourse(selectedCourse + 1);
       } else {
         setSelectedCourse(1);

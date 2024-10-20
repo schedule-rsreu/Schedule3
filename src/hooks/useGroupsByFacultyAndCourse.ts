@@ -9,9 +9,14 @@ export const useGroupsByFacultyAndCourse = (
 ) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["groups", faculty, course],
-    queryFn: () =>
-      scheduleService.getGroupsByCourseAndFaculty(faculty, course, initDataRaw),
-    select: (data) => data.groups,
+    queryFn: ({ signal }) =>
+      scheduleService.getGroupsByCourseAndFaculty(
+        faculty,
+        course,
+        initDataRaw,
+        signal
+      ),
+    select: (data) => data?.groups,
     enabled: !!faculty && !!course,
     refetchOnWindowFocus: false,
     staleTime: hoursToMilliseconds(24),
