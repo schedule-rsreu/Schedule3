@@ -1,4 +1,4 @@
-import { parse, isBefore, isAfter, isEqual } from "date-fns";
+import { parse, isBefore, isAfter, isEqual, subMinutes } from "date-fns";
 import { IPair } from "../types/schedule";
 import { useStore } from "../store/store";
 import { dayIndices } from "../constants";
@@ -39,13 +39,16 @@ export const useCurrentPairIndex = (schedule: IPair[], currentTime: string) => {
 
     const currentDateTime = parse(currentTime, "HH:mm", new Date());
 
+    const startTimeWithOffset = subMinutes(startTime, 10);
+
     if (
-      (isEqual(currentDateTime, startTime) ||
-        isAfter(currentDateTime, startTime)) &&
+      (isEqual(currentDateTime, startTimeWithOffset) ||
+        isAfter(currentDateTime, startTimeWithOffset)) &&
       isBefore(currentDateTime, endTime)
     ) {
       return index;
     }
   }
+
   return -1;
 };

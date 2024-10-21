@@ -4,20 +4,23 @@
 
 @font-face 
   font-family: "Montserrat"
-  src: local("Montserrat"), url("/fonts/Montserrat-Light.ttf") format("truetype")
+  src: local("Montserrat"), url("/assets/fonts/Montserrat-Light.woff2") format("woff2")
   font-display: swap
+  font-style: normal
   font-weight: 300
 
 @font-face 
   font-family: "Montserrat"
-  src: local("Montserrat"), url("/fonts/Montserrat-Regular.ttf") format("truetype")
+  src: local("Montserrat"), url("/assets/fonts/Montserrat-Regular.woff2") format("woff2")
   font-display: swap
+  font-style: normal
   font-weight: 400
 
 @font-face 
   font-family: "Montserrat"
-  src: local("Montserrat"), url("/fonts/Montserrat-Medium.ttf") format("truetype")
+  src: local("Montserrat"), url("/assets/fonts/Montserrat-Medium.woff2") format("woff2")
   font-display: swap
+  font-style: normal
   font-weight: 500
 
 :root 
@@ -178,7 +181,7 @@ body
     transform: scaleY(1)
     transform-origin: top
 
-// Стили для кастомного селекта факультетов
+// Стили для селекта факультетов
 .department-select
   &-container > div
     outline: none !important
@@ -257,7 +260,7 @@ body
   &__indicator 
     color: var(--accent) !important
 
-// Кастомные стили групп
+// Стили для селекта групп
 .group-select
   &-container > div
     outline: none !important

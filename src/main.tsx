@@ -1,16 +1,14 @@
-import React from "react";
-import { Layout, Schedule, TopBar, Wrapper } from "./components";
-import { useInitialization } from "./hooks/useInitialization";
+import "./index.sass";
+import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Main } from "./app";
 
-export const Main: React.FC = () => {
-  useInitialization();
+const queryClient = new QueryClient();
 
-  return (
-    <Layout>
-      <Wrapper>
-        <TopBar />
-        <Schedule />
-      </Wrapper>
-    </Layout>
-  );
-};
+createRoot(document.getElementById("root")!).render(
+  <QueryClientProvider client={queryClient}>
+    <Main />
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>
+);
