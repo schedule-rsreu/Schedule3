@@ -100,30 +100,26 @@ export const Schedule: React.FC = () => {
     }
   }, [schedule, currentDay, currentWeek]);
 
-  if (isLoading) {
+  if (isLoading || !isScheduleLoaded) {
     return <div className="loader" />;
   }
-
+  
   if (error) {
     return (
       <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem] no-schedule">
-        <h2 className="font-normal text-[1.5rem]">
-          Ошибка загрузки расписания
-        </h2>
+        <h2 className="font-normal text-[1.5rem]">Ошибка загрузки расписания</h2>
       </div>
     );
   }
-
+  
   if (!selectedFaculty || !selectedGroup) {
     return (
       <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem]">
-        <h2 className="font-normal text-[1.5rem]">
-          Выберите факультет и группу
-        </h2>
+        <h2 className="font-normal text-[1.5rem]">Выберите факультет и группу</h2>
       </div>
     );
   }
-
+  
   if (isScheduleLoaded && schedule.length === 0) {
     return (
       <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem] no-schedule">
@@ -131,6 +127,7 @@ export const Schedule: React.FC = () => {
       </div>
     );
   }
+  
 
   return (
     <main className="flex flex-col justify-center items-center w-full max-w-3xl">
