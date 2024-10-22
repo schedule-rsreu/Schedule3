@@ -2,6 +2,7 @@ import { parse, isBefore, isAfter, isEqual, subMinutes } from "date-fns";
 import { IPair } from "../types/schedule";
 import { useStore } from "../store/store";
 import { dayIndices } from "../constants";
+import { parseTime } from "../utils/parse-time";
 
 export const useCurrentPairIndex = (
   schedule: IPair[],
@@ -25,27 +26,23 @@ export const useCurrentPairIndex = (
     return -1;
   }
 
-  for (let index = 0; index < schedule.length; index++) {
-    const startTime = parse(
-      schedule[index].time.split("-")[0],
-      "HH.mm",
-      new Date()
-    );
-    const endTime = parse(
-      schedule[index].time.split("-")[1],
-      "HH.mm",
-      new Date()
-    );
+  try {
     const currentDateTime = parse(currentTime, "HH:mm", new Date());
-    const startTimeWithOffset = subMinutes(startTime, 10);
+    for (let index = 0; index < schedule.length; index++) {
+      const { start, end } = parseTime(schedule[index].time);
+      const startTimeWithOffset = subMinutes(start, 10);
 
-    if (
-      (isEqual(currentDateTime, startTimeWithOffset) ||
-        isAfter(currentDateTime, startTimeWithOffset)) &&
-      isBefore(currentDateTime, endTime)
-    ) {
-      return index;
+      if (
+        (isEqual(currentDateTime, startTimeWithOffset) ||
+          isAfter(currentDateTime, startTimeWithOffset)) &&
+        isBefore(currentDateTime, end)
+      ) {
+        return index;
+      }
     }
+  } catch (error) {
+    console.log("Error processing schedule times:", error);
+    return -1;
   }
 
   return -1;

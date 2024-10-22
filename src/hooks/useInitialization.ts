@@ -45,7 +45,7 @@ export const useInitialization = () => {
 
         if (data?.group) applyUserData(data, initDataRaw);
       } catch (error) {
-        console.error("Error initializing Telegram Web App:", error);
+        console.log("Error initializing Telegram Web App:", error);
       } finally {
         setIsLoadingInit(false);
       }
