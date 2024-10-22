@@ -3,25 +3,25 @@ import { IPair } from "../types/schedule";
 import { useStore } from "../store/store";
 import { dayIndices } from "../constants";
 
-export const useCurrentPairIndex = (schedule: IPair[], currentTime: string) => {
+export const useCurrentPairIndex = (
+  schedule: IPair[],
+  currentTime: string,
+  selectedDayEn: string | null,
+  currentDay: string | null,
+  currentWeek: string | null
+) => {
   const selectedDay = useStore((state) => state.selectedDay);
-  const selectedDayEn = useStore((state) => state.selectedDayEn);
   const selectedWeek = useStore((state) => state.selectedWeek);
 
-  const currentDay = useStore((state) => state.currentDay);
-  const currentWeek = useStore((state) => state.currentWeek);
-
-  if (selectedWeek !== currentWeek) {
-    return -1;
-  }
-
-  if (selectedDay !== currentDay) {
-    return -1;
-  }
+  if (schedule.length === 0) return -1;
 
   const today = new Date().getDay();
 
-  if (selectedDayEn && today !== dayIndices[selectedDayEn]) {
+  if (
+    selectedWeek !== currentWeek ||
+    selectedDay !== currentDay ||
+    (selectedDayEn && today !== dayIndices[selectedDayEn])
+  ) {
     return -1;
   }
 
@@ -36,9 +36,7 @@ export const useCurrentPairIndex = (schedule: IPair[], currentTime: string) => {
       "HH.mm",
       new Date()
     );
-
     const currentDateTime = parse(currentTime, "HH:mm", new Date());
-
     const startTimeWithOffset = subMinutes(startTime, 10);
 
     if (

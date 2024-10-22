@@ -15,14 +15,16 @@ export const useStore = create<IStore>()(
         selectedDay: null,
         selectedDayEn: null,
         currentDay: null,
+        courses: null,
         faculties: null,
         initDataRaw: "",
         initSchedule: null,
         groupAuth: null,
         isLoadingInit: true,
         isLoadingToday: true,
+        isLoadingCourses: false,
         isLoadingFaculties: true,
-        
+
         setSelectedCourse: (selectedCourse) =>
           set((state) => ({
             ...state,
@@ -77,6 +79,12 @@ export const useStore = create<IStore>()(
             currentDay,
           })),
 
+        setCourses: (courses) =>
+          set((state) => ({
+            ...state,
+            courses,
+          })),
+
         setFaculties: (faculties) =>
           set((state) => ({
             ...state,
@@ -111,6 +119,12 @@ export const useStore = create<IStore>()(
           set((state) => ({
             ...state,
             isLoadingToday,
+          })),
+
+        setIsLoadingCourses: (isLoadingCourses) =>
+          set((state) => ({
+            ...state,
+            isLoadingCourses,
           })),
 
         setIsLoadingFaculties: (isLoadingFaculties) =>

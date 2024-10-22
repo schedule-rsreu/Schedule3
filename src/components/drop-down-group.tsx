@@ -15,10 +15,11 @@ export const DropDownGroup: React.FC<IProps> = ({ className }) => {
   const selectedFaculty = useStore((state) => state.selectedFaculty);
   const selectedGroup = useStore((state) => state.selectedGroup);
   const setSelectedGroup = useStore((state) => state.setSelectedGroup);
+  const isLoadingCourses = useStore((state) => state.isLoadingCourses);
 
   const { groups, isLoading, error } = useGroupsByFacultyAndCourse(
     selectedFaculty?.value || "",
-    selectedCourse,
+    (!isLoadingCourses && selectedCourse) || NaN,
     initDataRaw
   );
 

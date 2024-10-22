@@ -12,15 +12,12 @@ export const Course: React.FC<IProps> = ({ className }) => {
   const selectedFaculty = useStore((state) => state.selectedFaculty);
   const selectedCourse = useStore((state) => state.selectedCourse);
   const setSelectedCourse = useStore((state) => state.setSelectedCourse);
+  const setIsLoadingCourses = useStore((state) => state.setIsLoadingCourses);
 
   const { courses, isLoading, error } = useCoursesByFaculty(
-    selectedFaculty?.value.toLowerCase() || "",
+    (selectedFaculty && selectedFaculty.value.toLowerCase()) || "",
     initDataRaw
   );
-
-  if (error) {
-    console.error(error.message);
-  }
 
   const handleCourseChange = () => {
     if (courses) {
@@ -33,10 +30,14 @@ export const Course: React.FC<IProps> = ({ className }) => {
   };
 
   React.useEffect(() => {
-    if (courses && !courses.includes(selectedCourse)) {
+    setIsLoadingCourses(isLoading);
+  }, [isLoading]);
+
+  React.useEffect(() => {
+    if (courses && !isLoading && selectedCourse > courses.length) {
       setSelectedCourse(1);
     }
-  }, [courses]);
+  }, [courses, isLoading, selectedFaculty]);
 
   return (
     <button

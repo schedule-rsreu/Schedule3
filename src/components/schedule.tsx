@@ -5,9 +5,12 @@ import { useSchedule } from "../hooks/useSchedule";
 import { IDays, IPair, ISchedule } from "../types/schedule";
 import { Pair } from "./pair";
 import { daysOfTheWeekEn, fractionsEn } from "../constants";
+import { useCurrentPairIndex } from "../hooks/useCurrentPairIndex";
 
 export const Schedule: React.FC = () => {
   const [schedule, setSchedule] = React.useState<IPair[]>([]);
+  const [isScheduleLoaded, setIsScheduleLoaded] =
+    React.useState<boolean>(false);
   const [currentTime, setCurrentTime] = React.useState(
     format(new Date(), "HH:mm")
   );
@@ -24,6 +27,14 @@ export const Schedule: React.FC = () => {
   const currentDay = useStore((state) => state.currentDay);
   const currentWeek = useStore((state) => state.currentWeek);
 
+  const currentPairIndex = useCurrentPairIndex(
+    schedule,
+    currentTime,
+    selectedDayEn,
+    currentDay,
+    currentWeek
+  );
+
   const { data, isLoading, error } = useSchedule(
     selectedGroup
       ? selectedGroup.value !== groupAuth
@@ -32,6 +43,40 @@ export const Schedule: React.FC = () => {
       : "",
     initDataRaw
   );
+
+  React.useEffect(() => {
+    if (selectedGroup && selectedDayEn && selectedWeekEn) {
+      let newSchedule: IPair[] = [];
+      if (data && selectedGroup.value !== groupAuth) {
+        newSchedule =
+          data[selectedWeekEn as keyof ISchedule]?.[
+            selectedDayEn as keyof IDays
+          ] || [];
+      } else if (initSchedule && selectedGroup.value === groupAuth) {
+        newSchedule =
+          initSchedule[selectedWeekEn as keyof ISchedule]?.[
+            selectedDayEn as keyof IDays
+          ] || [];
+      }
+
+      if (
+        (JSON.stringify(newSchedule) !== JSON.stringify(schedule) ||
+          (newSchedule.length === 0 && schedule.length === 0)) &&
+        !isLoading
+      ) {
+        setSchedule(newSchedule);
+        setIsScheduleLoaded(true);
+      }
+    }
+  }, [
+    data,
+    isLoading,
+    initSchedule,
+    selectedDayEn,
+    selectedWeekEn,
+    selectedGroup,
+    groupAuth,
+  ]);
 
   React.useEffect(() => {
     if (
@@ -49,47 +94,9 @@ export const Schedule: React.FC = () => {
     }
   }, [schedule, currentDay, currentWeek]);
 
-  React.useEffect(() => {
-    if (selectedGroup && selectedDayEn && selectedWeekEn) {
-      if (data && selectedGroup.value !== groupAuth) {
-        if (
-          data[selectedWeekEn as keyof ISchedule] &&
-          data[selectedWeekEn as keyof ISchedule][selectedDayEn as keyof IDays]
-        ) {
-          setSchedule(
-            data[selectedWeekEn as keyof ISchedule][
-              selectedDayEn as keyof IDays
-            ]
-          );
-        }
-      } else if (initSchedule && selectedGroup.value === groupAuth) {
-        if (
-          initSchedule[selectedWeekEn as keyof ISchedule] &&
-          initSchedule[selectedWeekEn as keyof ISchedule][
-            selectedDayEn as keyof IDays
-          ]
-        ) {
-          setSchedule(
-            initSchedule[selectedWeekEn as keyof ISchedule][
-              selectedDayEn as keyof IDays
-            ]
-          );
-        }
-      }
-    }
-  }, [
-    data,
-    initSchedule,
-    selectedDayEn,
-    selectedWeekEn,
-    selectedGroup,
-    groupAuth,
-  ]);
-
   return (
     <main className="flex flex-col justify-center items-center w-full max-w-3xl">
       {isLoading && <div className="loader" />}
-
       {!isLoading && error && (
         <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem] no-schedule">
           <h2 className="font-normal text-[1.5rem]">
@@ -97,7 +104,6 @@ export const Schedule: React.FC = () => {
           </h2>
         </div>
       )}
-
       {(!selectedFaculty || !selectedGroup) && !isLoading && !error && (
         <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem]">
           <h2 className="font-normal text-[1.5rem]">
@@ -105,32 +111,31 @@ export const Schedule: React.FC = () => {
           </h2>
         </div>
       )}
-
       {selectedFaculty &&
-      selectedGroup &&
-      !isLoading &&
-      !error &&
-      schedule.length > 0
-        ? schedule.map((pair, index) => (
-            <Pair
-              key={index}
-              schedule={schedule}
-              currentTime={currentTime}
-              pair={pair}
-              index={index}
-            />
-          ))
-        : selectedFaculty &&
-          selectedGroup &&
-          !isLoading &&
-          !error &&
-          schedule.length === 0 && (
-            <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem] no-schedule">
-              <h2 className="font-normal text-[1.5rem]">
-                В этот день нет занятий
-              </h2>
-            </div>
-          )}
+        selectedGroup &&
+        !isLoading &&
+        !error &&
+        isScheduleLoaded &&
+        schedule.length === 0 && (
+          <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem] no-schedule">
+            <h2 className="font-normal text-[1.5rem]">
+              В этот день нет занятий
+            </h2>
+          </div>
+        )}
+      {selectedFaculty &&
+        selectedGroup &&
+        !isLoading &&
+        !error &&
+        schedule.length > 0 &&
+        schedule.map((pair, index) => (
+          <Pair
+            key={index}
+            pair={pair}
+            index={index}
+            currentPairIndex={currentPairIndex}
+          />
+        ))}
     </main>
   );
 };
