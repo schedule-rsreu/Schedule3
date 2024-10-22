@@ -19,7 +19,7 @@ export const useGroupsByFacultyAndCourse = (
     select: (data) => data?.groups,
     enabled: !!faculty && !!course,
     refetchOnWindowFocus: false,
-    staleTime: hoursToMilliseconds(24),
+    staleTime: hoursToMilliseconds(12),
   });
 
   return {

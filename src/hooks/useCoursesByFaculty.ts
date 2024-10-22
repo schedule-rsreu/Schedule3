@@ -10,7 +10,7 @@ export const useCoursesByFaculty = (faculty: string, initDataRaw: string) => {
     select: (data) => data?.courses,
     enabled: !!faculty,
     refetchOnWindowFocus: false,
-    staleTime: hoursToMilliseconds(24),
+    staleTime: hoursToMilliseconds(12),
   });
 
   return {
