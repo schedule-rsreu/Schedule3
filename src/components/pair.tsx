@@ -37,9 +37,7 @@ export const Pair: React.FC<Props> = React.memo(
           className={cn(
             "flex items-center justify-center bg-secondary font-medium rounded-[.5rem] text-[1.5rem] w-[9rem] h-[2.3rem] mt-0 mb-[.5rem] mx-auto transition-all duration-500", // Плавный переход для фона
             {
-              "!bg-accent": isCurrent,
-              "text-white": isCurrent,
-              "text-black": !isCurrent,
+              "!bg-accent text-white": isCurrent,
               "transition-none": true,
             }
           )}
