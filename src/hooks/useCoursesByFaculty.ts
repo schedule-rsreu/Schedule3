@@ -15,7 +15,7 @@ export const useCoursesByFaculty = (faculty: string, initDataRaw: string) => {
 
   return {
     courses: data,
-    isLoading,
-    error,
+    isLoadingCourses: isLoading,
+    errorCourses: error,
   };
 };

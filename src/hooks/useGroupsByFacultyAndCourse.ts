@@ -24,7 +24,7 @@ export const useGroupsByFacultyAndCourse = (
 
   return {
     groups: data,
-    isLoading,
-    error,
+    isLoadingGroups: isLoading,
+    errorGroups: error,
   };
 };

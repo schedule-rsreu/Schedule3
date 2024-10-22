@@ -4,7 +4,6 @@ import { ISchedule } from "./schedule";
 export interface IStore {
   selectedCourse: number;
   selectedFaculty: IFacultyOption | null;
-  courses: number[] | null;
   faculties: string[] | null;
   selectedGroup: IGroupOption | null;
   selectedWeek: string | null;
@@ -17,12 +16,10 @@ export interface IStore {
   groupAuth: string | null;
   initSchedule: ISchedule | null;
   isLoadingInit: boolean;
-  isLoadingCourses: boolean;
   isLoadingFaculties: boolean;
   isLoadingToday: boolean;
   setSelectedCourse: (course: number) => void;
   setSelectedFaculty: (faculty: IFacultyOption | null) => void;
-  setCourses: (courses: number[] | null) => void;
   setFaculties: (faculties: string[]) => void;
   setSelectedGroup: (group: IGroupOption | null) => void;
   setSelectedWeek: (week: string) => void;
@@ -35,7 +32,6 @@ export interface IStore {
   setInitSchedule: (initSchedule: ISchedule | null) => void;
   setIsLoadingInit: (loading: boolean) => void;
   setIsLoadingToday: (loading: boolean) => void;
-  setIsLoadingCourses: (loading: boolean) => void;
   setIsLoadingFaculties: (loading: boolean) => void;
   setCurrentWeek: (week: string) => void;
 }
