@@ -32,6 +32,8 @@ export const DropDownGroup: React.FC<IProps> = React.memo(
       }))
       .filter((group) => group.value !== selectedGroup?.value);
 
+    // str.trim().split(" ").filter((group) => group !== "").join(" ")
+
     const handleGroupChange = (
       newValue: OnChangeValue<IGroupOption, false>
     ) => {
@@ -40,7 +42,7 @@ export const DropDownGroup: React.FC<IProps> = React.memo(
 
     React.useEffect(() => {
       if (groups && selectedGroup && selectedCourse && selectedFaculty) {
-        if (!groups.includes(selectedGroup?.value)) {
+        if (!groups.includes(selectedGroup?.value.toLowerCase())) {
           setSelectedGroup(null);
         }
       }
