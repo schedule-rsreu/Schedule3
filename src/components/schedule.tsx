@@ -9,6 +9,7 @@ import { useCurrentPairIndex } from "../hooks/useCurrentPairIndex";
 
 export const Schedule: React.FC = () => {
   const [schedule, setSchedule] = React.useState<IPair[]>([]);
+  const [isScheduleLoaded, setIsScheduleLoaded] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(
     format(new Date(), "HH:mm")
   );
@@ -79,6 +80,7 @@ export const Schedule: React.FC = () => {
     ) {
       prevScheduleRef.current = newSchedule;
       setSchedule(newSchedule);
+      setIsScheduleLoaded(true);
     }
   }, [newSchedule]);
 
@@ -98,7 +100,7 @@ export const Schedule: React.FC = () => {
     }
   }, [schedule, currentDay, currentWeek]);
 
-  if (isLoading) {
+  if (isLoading || !isScheduleLoaded) {
     return <div className="loader" />;
   }
   
@@ -118,7 +120,7 @@ export const Schedule: React.FC = () => {
     );
   }
   
-  if (!isLoading && schedule.length === 0) {
+  if (!isLoading && isScheduleLoaded && schedule.length === 0) {
     return (
       <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem]">
         <h2 className="font-normal text-[1.5rem]">В этот день нет занятий</h2>
