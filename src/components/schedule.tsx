@@ -9,24 +9,19 @@ import { useCurrentPairIndex } from "../hooks/useCurrentPairIndex";
 
 export const Schedule: React.FC = () => {
   const [schedule, setSchedule] = React.useState<IPair[]>([]);
-  const [isScheduleLoaded, setIsScheduleLoaded] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(
     format(new Date(), "HH:mm")
   );
 
-  const prevScheduleRef = React.useRef<IPair[]>([]);
-
+  const initDataRaw = useStore((state) => state.initDataRaw);
   const selectedGroup = useStore((state) => state.selectedGroup);
+  const groupAuth = useStore((state) => state.groupAuth);
   const selectedDayEn = useStore((state) => state.selectedDayEn);
   const selectedWeekEn = useStore((state) => state.selectedWeekEn);
+  const initSchedule = useStore((state) => state.initSchedule);
   const selectedFaculty = useStore((state) => state.selectedFaculty);
-
   const currentDay = useStore((state) => state.currentDay);
   const currentWeek = useStore((state) => state.currentWeek);
-
-  const initSchedule = useStore((state) => state.initSchedule);
-  const groupAuth = useStore((state) => state.groupAuth);
-  const initDataRaw = useStore((state) => state.initDataRaw);
 
   const { data, isLoading, error } = useSchedule(
     selectedGroup
@@ -74,13 +69,8 @@ export const Schedule: React.FC = () => {
   ]);
 
   React.useEffect(() => {
-    if (
-      JSON.stringify(newSchedule) !== JSON.stringify(prevScheduleRef.current) ||
-      (newSchedule.length === 0 && prevScheduleRef.current.length === 0)
-    ) {
-      prevScheduleRef.current = newSchedule;
+    if (JSON.stringify(schedule) !== JSON.stringify(newSchedule)) {
       setSchedule(newSchedule);
-      setIsScheduleLoaded(true);
     }
   }, [newSchedule]);
 
@@ -100,34 +90,37 @@ export const Schedule: React.FC = () => {
     }
   }, [schedule, currentDay, currentWeek]);
 
-  if (isLoading || !isScheduleLoaded) {
+  if (isLoading) {
     return <div className="loader" />;
   }
-  
+
   if (error) {
     return (
       <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem]">
-        <h2 className="font-normal text-[1.5rem]">Ошибка загрузки расписания</h2>
+        <h2 className="font-normal text-[1.5rem]">
+          Ошибка загрузки расписания
+        </h2>
       </div>
     );
   }
-  
+
   if (!selectedFaculty || !selectedGroup) {
     return (
       <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem]">
-        <h2 className="font-normal text-[1.5rem]">Выберите факультет и группу</h2>
+        <h2 className="font-normal text-[1.5rem]">
+          Выберите факультет и группу
+        </h2>
       </div>
     );
   }
-  
-  if (!isLoading && isScheduleLoaded && schedule.length === 0) {
+
+  if (!isLoading && schedule.length === 0 && newSchedule.length === 0) {
     return (
       <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem]">
         <h2 className="font-normal text-[1.5rem]">В этот день нет занятий</h2>
       </div>
     );
   }
-  
 
   return (
     <main className="flex flex-col justify-center items-center w-full max-w-3xl">

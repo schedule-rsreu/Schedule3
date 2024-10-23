@@ -57,10 +57,8 @@ export const useInitialization = () => {
 
         setFaculties(data.faculties);
       } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.message);
-          setFaculties(["иэф", "фаиту", "фвт", "фрт", "фэ"]);
-        }
+        setFaculties(["иэф", "фаиту", "фвт", "фрт", "фэ"]);
+        console.error(error);
       } finally {
         setIsLoadingFaculties(false);
       }
@@ -77,15 +75,13 @@ export const useInitialization = () => {
         setSelectedWeekEn(today.week_type_eng.toLowerCase());
         setCurrentWeek(today.week_type.toUpperCase());
       } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.message);
-          setSelectedDay("Пн");
-          setSelectedDayEn("monday");
-          setCurrentDay("Пн");
-          setSelectedWeek("ЧИСЛИТЕЛЬ");
-          setSelectedWeekEn("numerator");
-          setCurrentWeek("ЧИСЛИТЕЛЬ");
-        }
+        setSelectedDay("Пн");
+        setSelectedDayEn("monday");
+        setCurrentDay("Пн");
+        setSelectedWeek("ЧИСЛИТЕЛЬ");
+        setSelectedWeekEn("numerator");
+        setCurrentWeek("ЧИСЛИТЕЛЬ");
+        console.error(error);
       } finally {
         setIsLoadingToday(false);
       }
