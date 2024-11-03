@@ -95,10 +95,15 @@ export const useInitialization = () => {
     };
 
     const setupTelegramApp = async (telegramWebApp: TelegramWebApp) => {
-      const [swipeBehavior] = initSwipeBehavior();
+      try {
+        const [swipeBehavior] = initSwipeBehavior();
+        swipeBehavior.disableVerticalSwipe();
+      } catch (error) {
+        console.log("Update your Telegram version:", error);
+      }
+
       telegramWebApp.ready();
       telegramWebApp.expand();
-      swipeBehavior.disableVerticalSwipe();
     };
 
     const applyUserData = (data: IGetUser, initDataRaw: string) => {
