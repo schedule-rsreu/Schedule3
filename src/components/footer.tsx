@@ -15,7 +15,7 @@ export const Footer: React.FC = () => {
           <div className="inline-block mr-[1rem]">
             <img src="/assets/images/tg.svg" alt="tg icon" />
           </div>
-          BackEnd
+          Backend
         </a>
         <a
           href="https://t.me/Andrew13145"
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
           <div className="inline-block mr-[1rem]">
             <img src="/assets/images/tg.svg" alt="tg icon" />
           </div>
-          FrontEnd
+          Frontend
         </a>
         <a href="https://t.me/y_sklv" className="text-[1.3rem] font-normal">
           <div className="inline-block mr-[1rem]">
