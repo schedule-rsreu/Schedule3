@@ -25,7 +25,11 @@ export const useTelegramInit = () => {
 
       const data = await userService.getUser(id, initDataRaw);
 
-      if (data?.group) applyUserData(data, initDataRaw);
+      if (data?.group) {
+        applyUserData(data, initDataRaw);
+      } else {
+        setGroupAuth(null);
+      }
     } catch (error) {
       console.log("Error initializing Telegram Web App:", error);
     } finally {
