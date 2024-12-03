@@ -1,9 +1,9 @@
 import React from "react";
 import { Layout, Schedule, TopBar, Wrapper } from "./components";
-import { useInitialization } from "./hooks/useInitialization";
+import { useInit } from "./hooks/useInit";
 
 export const Main: React.FC = () => {
-  useInitialization();
+  useInit();
 
   return (
     <Layout>
