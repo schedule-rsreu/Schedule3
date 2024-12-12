@@ -2,7 +2,7 @@ import axios from "axios";
 import { IGetUser } from "../types/auth";
 
 class UserService {
-  private URL = "https://user.schedule.vingp.dev/user";
+  private URL = "https://user.rsreu-schedule.ru/user";
 
   async getUser(id: number, initDataRaw: string) {
     const { data } = await axios.get<IGetUser>(

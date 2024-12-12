@@ -7,7 +7,7 @@ import {
 } from "../types/schedule";
 
 class ScheduleService {
-  private URL = "https://api.schedule.vingp.dev/api/v1/schedule";
+  private URL = "https://api.rsreu-schedule.ru/api/v1/schedule";
 
   async getFaculties() {
     const { data } = await axios.get<IFaculties>(`${this.URL}/faculties`);
