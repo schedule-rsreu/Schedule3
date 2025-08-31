@@ -24,34 +24,54 @@ export const useStore = create<IStore>()(
         isLoadingFaculties: true,
 
         setSelectedCourse: (selectedCourse) =>
-          set((state) => ({
-            ...state,
-            selectedCourse,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              selectedCourse,
+            }),
+            false,
+            "setSelectedCourse"
+          ),
 
         setSelectedFaculty: (selectedFaculty) =>
-          set((state) => ({
-            ...state,
-            selectedFaculty,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              selectedFaculty,
+            }),
+            false,
+            "setSelectedFaculty"
+          ),
 
         setSelectedGroup: (selectedGroup) =>
-          set((state) => ({
-            ...state,
-            selectedGroup,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              selectedGroup,
+            }),
+            false,
+            "setSelectedGroup"
+          ),
 
         setSelectedWeek: (selectedWeek) =>
-          set((state) => ({
-            ...state,
-            selectedWeek,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              selectedWeek,
+            }),
+            false,
+            "setSelectedWeek"
+          ),
 
         setSelectedWeekEn: (selectedWeekEn) =>
-          set((state) => ({
-            ...state,
-            selectedWeekEn,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              selectedWeekEn,
+            }),
+            false,
+            "setSelectedWeekEn"
+          ),
 
         setCurrentWeek: (currentWeek) =>
           set((state) => ({
@@ -60,64 +80,104 @@ export const useStore = create<IStore>()(
           })),
 
         setSelectedDay: (selectedDay) =>
-          set((state) => ({
-            ...state,
-            selectedDay,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              selectedDay,
+            }),
+            false,
+            "setSelectedDay"
+          ),
 
         setSelectedDayEn: (selectedDayEn) =>
-          set((state) => ({
-            ...state,
-            selectedDayEn,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              selectedDayEn,
+            }),
+            false,
+            "setSelectedDayEn"
+          ),
 
         setCurrentDay: (currentDay) =>
-          set((state) => ({
-            ...state,
-            currentDay,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              currentDay,
+            }),
+            false,
+            "setCurrentDay"
+          ),
 
         setFaculties: (faculties) =>
-          set((state) => ({
-            ...state,
-            faculties,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              faculties,
+            }),
+            false,
+            "setFaculties"
+          ),
 
         setInitDataRaw: (initDataRaw) =>
-          set((state) => ({
-            ...state,
-            initDataRaw,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              initDataRaw,
+            }),
+            false,
+            "setInitDataRaw"
+          ),
 
         setInitSchedule: (initSchedule) =>
-          set((state) => ({
-            ...state,
-            initSchedule,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              initSchedule,
+            }),
+            false,
+            "setInitSchedule"
+          ),
 
         setGroupAuth: (groupAuth) =>
-          set((state) => ({
-            ...state,
-            groupAuth,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              groupAuth,
+            }),
+            false,
+            "setGroupAuth"
+          ),
 
         setIsLoadingInit: (isLoadingInit) =>
-          set((state) => ({
-            ...state,
-            isLoadingInit,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              isLoadingInit,
+            }),
+            false,
+            "setIsLoadingInit"
+          ),
 
         setIsLoadingToday: (isLoadingToday) =>
-          set((state) => ({
-            ...state,
-            isLoadingToday,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              isLoadingToday,
+            }),
+            false,
+            "setIsLoadingToday"
+          ),
 
         setIsLoadingFaculties: (isLoadingFaculties) =>
-          set((state) => ({
-            ...state,
-            isLoadingFaculties,
-          })),
+          set(
+            (state) => ({
+              ...state,
+              isLoadingFaculties,
+            }),
+            false,
+            "setIsLoadingFaculties"
+          ),
       }),
       {
         name: "schedule-storage",
