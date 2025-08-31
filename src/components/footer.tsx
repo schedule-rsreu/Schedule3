@@ -6,7 +6,7 @@ export const Footer: React.FC = () => {
       <div className="flex justify-center items-center mb-[2rem]">
         <div className="w-[8.5rem] h-0 border-b-[.1rem] border-solid border-[#4C9BF8] mr-[1rem] last:mr-0" />
         <div className="text-[1.3rem] mr-[1rem] font-normal">
-          ByGroup344© 2024
+          ByGroup344© 2025
         </div>
         <div className="w-[8.5rem] h-0 border-b-[.1rem] border-solid border-[#4C9BF8] mr-[1rem] last:mr-0" />
       </div>

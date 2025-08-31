@@ -6,7 +6,7 @@ export const parseTime = (timeString: string) => {
     throw new Error(`Invalid time format: ${timeString}`);
   }
   return {
-    start: parse(timeParts[0], "HH.mm", new Date()),
-    end: parse(timeParts[1], "HH.mm", new Date()),
+    start: parse(timeParts[0], "HH:mm", new Date()),
+    end: parse(timeParts[1], "HH:mm", new Date()),
   };
 };
