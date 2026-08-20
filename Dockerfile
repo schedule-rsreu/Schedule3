@@ -1,16 +1,16 @@
-FROM node:18
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json .
-RUN npm i
+COPY package.json package-lock.json ./
+RUN npm ci
 
 COPY . .
-
 RUN npm run build
 
-RUN npm install -g serve
+FROM nginx:alpine
 
-EXPOSE 3000
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-CMD ["npx", "serve", "dist"]
+EXPOSE 8080
