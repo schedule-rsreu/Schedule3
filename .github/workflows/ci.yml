@@ -26,3 +26,13 @@ jobs:
 
       - name: Build Docker image
         run: docker build .
+
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.21.3
+
+      - name: Validate Helm chart
+        run: |
+          helm lint charts/schedule3 --set-string image.tag=test
+          helm template schedule3 charts/schedule3 \
+            --namespace schedule-api --set-string image.tag=test >/dev/null
