@@ -1,0 +1,94 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: schedule3-production
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Login to GHCR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$GH_TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build and push immutable image
+        run: |
+          image="ghcr.io/schedule-rsreu/schedule3:${GITHUB_SHA}"
+          docker build -t "$image" .
+          docker push "$image"
+
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.21.3
+
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+
+      - name: Provision image pull secret
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+          GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+        run: |
+          for name in DEPLOY_HOST DEPLOY_USER GHCR_USERNAME GHCR_PULL_TOKEN; do
+            [ -n "$(printenv "$name")" ] || {
+              echo "::error::$name is empty"
+              exit 1
+            }
+          done
+
+          registry_auth="$(printf '%s' "$GHCR_USERNAME:$GHCR_PULL_TOKEN" | base64 -w0)"
+          docker_config="$(printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' \
+            "$registry_auth" | base64 -w0)"
+
+          {
+            printf 'apiVersion: v1\nkind: Namespace\nmetadata:\n  name: schedule-api\n---\n'
+            printf 'apiVersion: v1\nkind: Secret\nmetadata:\n'
+            printf '  name: ghcr-pull\n  namespace: schedule-api\n'
+            printf 'type: kubernetes.io/dockerconfigjson\ndata:\n'
+            printf '  .dockerconfigjson: %s\n' "$docker_config"
+          } | ssh -i ~/.ssh/id_ed25519 "$DEPLOY_USER@$DEPLOY_HOST" \
+            "k3s kubectl apply -f -"
+
+      - name: Deploy atomically
+        if: vars.K3S_DEPLOY_ENABLED == 'true'
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          mkdir -p dist
+          helm package charts/schedule3 --destination dist
+          archive="$(find dist -name 'schedule3-*.tgz' -print -quit)"
+          remote_archive="/tmp/schedule3-${GITHUB_SHA}.tgz"
+          scp -i ~/.ssh/id_ed25519 "$archive" \
+            "$DEPLOY_USER@$DEPLOY_HOST:$remote_archive"
+          ssh -i ~/.ssh/id_ed25519 "$DEPLOY_USER@$DEPLOY_HOST" \
+            "set -eu
+             helm upgrade --install schedule3 '$remote_archive' \
+               --kubeconfig /etc/rancher/k3s/k3s.yaml \
+               --namespace schedule-api \
+               --set-string image.tag='${GITHUB_SHA}' \
+               --atomic --wait --timeout 10m
+             rm -f '$remote_archive'"

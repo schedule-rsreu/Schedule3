@@ -48,3 +48,22 @@ export default tseslint.config({
   },
 })
 ```
+
+## Kubernetes deployment
+
+Pushes to `main` publish the private image
+`ghcr.io/schedule-rsreu/schedule3:<commit-sha>`. Deployment to the existing
+`schedule-api` namespace runs only when the repository variable
+`K3S_DEPLOY_ENABLED` is set to `true`.
+
+Repository secrets:
+
+- `DEPLOY_HOST` — server IP or DNS name;
+- `DEPLOY_USER` — SSH user;
+- `DEPLOY_SSH_KEY` — unencrypted private SSH key;
+- `DEPLOY_KNOWN_HOSTS` — verified server `known_hosts` line;
+- `GHCR_USERNAME` — GitHub user allowed to pull the private package;
+- `GHCR_PULL_TOKEN` — classic PAT with `read:packages`.
+
+The Helm release serves `https://schedule.vingp.dev` and
+`https://rsreu-schedule.ru` through k3s Traefik.

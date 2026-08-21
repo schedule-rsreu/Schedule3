@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Build Docker image
+        run: docker build .
+
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.21.3
+
+      - name: Validate Helm chart
+        run: |
+          helm lint charts/schedule3 --set-string image.tag=test
+          helm template schedule3 charts/schedule3 \
+            --namespace schedule-api --set-string image.tag=test >/dev/null
