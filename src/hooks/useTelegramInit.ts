@@ -25,6 +25,11 @@ export const useTelegramInit = () => {
 
       const data = await userService.getUser(id, initDataRaw);
 
+      window.umami?.identify({
+        id: `telegram:${data.telegram_id}`,
+        telegram_username: data.telegram_username,
+      });
+
       if (data?.group) {
         applyUserData(data, initDataRaw);
       } else {

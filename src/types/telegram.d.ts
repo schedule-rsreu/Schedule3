@@ -3,6 +3,9 @@ declare global {
     Telegram: {
       WebApp: TelegramWebApp;
     };
+    umami?: {
+      identify: (data: { id: string; telegram_username: string }) => void;
+    };
   }
 }
 
