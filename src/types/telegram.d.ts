@@ -5,6 +5,7 @@ declare global {
     };
     umami?: {
       identify: (data: { id: string; telegram_username: string }) => void;
+      track: (event: string, data: Record<string, string>) => void;
     };
   }
 }

@@ -9,6 +9,7 @@ import { useCurrentPairIndex } from "../hooks/useCurrentPairIndex";
 
 export const Schedule: React.FC = () => {
   const [schedule, setSchedule] = React.useState<IPair[]>([]);
+  const lastTrackedGroup = React.useRef<string | null>(null);
   const [currentTime, setCurrentTime] = React.useState(
     format(new Date(), "HH:mm")
   );
@@ -39,6 +40,23 @@ export const Schedule: React.FC = () => {
     currentDay,
     currentWeek
   );
+
+  React.useEffect(() => {
+    const group = selectedGroup?.value;
+    const isLoaded = group === groupAuth ? initSchedule : data;
+
+    if (
+      !group ||
+      !isLoaded ||
+      !window.umami ||
+      lastTrackedGroup.current === group
+    ) {
+      return;
+    }
+
+    window.umami.track("schedule-view", { group });
+    lastTrackedGroup.current = group;
+  }, [data, groupAuth, initSchedule, selectedGroup]);
 
   const newSchedule = React.useMemo(() => {
     if (data && selectedGroup && selectedGroup.value !== groupAuth) {
