@@ -8,7 +8,7 @@ export const useCoursesByFaculty = (faculty: string, initDataRaw: string) => {
     queryFn: ({ signal }) =>
       scheduleService.getCoursesByFaculty(faculty, initDataRaw, signal),
     select: (data) => data?.courses,
-    enabled: !!faculty,
+    enabled: !!faculty && !!initDataRaw,
     refetchOnWindowFocus: false,
     staleTime: hoursToMilliseconds(12),
   });

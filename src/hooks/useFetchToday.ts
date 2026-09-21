@@ -10,9 +10,9 @@ export const useFetchToday = () => {
   const setCurrentWeek = useStore((state) => state.setCurrentWeek);
   const setIsLoadingToday = useStore((state) => state.setIsLoadingToday);
 
-  const fetchToday = async () => {
+  const fetchToday = async (initDataRaw: string) => {
     try {
-      const today = await dayService.getToday();
+      const today = await dayService.getToday(initDataRaw);
 
       setSelectedDay(today.day_ru);
       setSelectedDayEn(today.day.toLowerCase());

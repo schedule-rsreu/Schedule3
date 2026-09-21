@@ -9,8 +9,11 @@ export const useInit = () => {
   const { fetchToday } = useFetchToday();
 
   React.useEffect(() => {
-    initializeTelegramWebApp();
-    fetchFaculties();
-    fetchToday();
+    void (async () => {
+      const initDataRaw = await initializeTelegramWebApp();
+      if (initDataRaw) {
+        await Promise.all([fetchFaculties(initDataRaw), fetchToday(initDataRaw)]);
+      }
+    })();
   }, []);
 };

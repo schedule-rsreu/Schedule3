@@ -9,8 +9,12 @@ import {
 class ScheduleService {
   private URL = "https://api.rsreu-schedule.ru/api/v1/schedule";
 
-  async getFaculties() {
-    const { data } = await axios.get<IFaculties>(`${this.URL}/faculties`);
+  async getFaculties(initDataRaw: string) {
+    const { data } = await axios.get<IFaculties>(`${this.URL}/faculties`, {
+      headers: {
+        authorization: `tma ${initDataRaw}`,
+      },
+    });
 
     return data;
   }

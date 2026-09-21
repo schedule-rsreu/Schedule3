@@ -7,9 +7,9 @@ export const useFetchFaculties = () => {
     (state) => state.setIsLoadingFaculties
   );
 
-  const fetchFaculties = async () => {
+  const fetchFaculties = async (initDataRaw: string) => {
     try {
-      const data = await scheduleService.getFaculties();
+      const data = await scheduleService.getFaculties(initDataRaw);
       setFaculties(data.faculties);
     } catch (error) {
       setFaculties(["иэф", "фаиту", "фвт", "фрт", "фэ"]);

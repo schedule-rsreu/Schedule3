@@ -17,7 +17,7 @@ export const useGroupsByFacultyAndCourse = (
         signal
       ),
     select: (data) => data?.groups,
-    enabled: !!faculty && !!course,
+    enabled: !!faculty && !!course && !!initDataRaw,
     refetchOnWindowFocus: false,
     staleTime: hoursToMilliseconds(12),
   });

@@ -7,7 +7,7 @@ export const useSchedule = (group: string, initDataRaw: string) => {
     queryFn: ({ signal }) =>
       scheduleService.getSchedule(group, initDataRaw, signal),
     select: (data) => data?.schedule,
-    enabled: !!group,
+    enabled: !!group && !!initDataRaw,
     refetchOnWindowFocus: false,
   });
 

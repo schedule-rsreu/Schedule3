@@ -14,12 +14,16 @@ export const useTelegramInit = () => {
   const setSelectedGroup = useStore((state) => state.setSelectedGroup);
 
   const initializeTelegramWebApp = async () => {
+    let initDataRaw: string | undefined;
     try {
-      const { telegramWebApp, initDataRaw, id } = getTelegramParams();
+      const params = getTelegramParams();
+      initDataRaw = params.initDataRaw;
+      const { telegramWebApp, id } = params;
 
       if (!initDataRaw || !id) {
         throw new Error("No initDataRaw or user id found.");
       }
+      setInitDataRaw(initDataRaw);
 
       await setupTelegramApp(telegramWebApp);
 
@@ -31,7 +35,7 @@ export const useTelegramInit = () => {
       });
 
       if (data?.group) {
-        applyUserData(data, initDataRaw);
+        applyUserData(data);
       } else {
         setGroupAuth(null);
       }
@@ -40,6 +44,7 @@ export const useTelegramInit = () => {
     } finally {
       setIsLoadingInit(false);
     }
+    return initDataRaw;
   };
 
   const getTelegramParams = () => {
@@ -61,9 +66,8 @@ export const useTelegramInit = () => {
     telegramWebApp.expand();
   };
 
-  const applyUserData = (data: IGetUser, initDataRaw: string) => {
+  const applyUserData = (data: IGetUser) => {
     setGroupAuth(data.group);
-    setInitDataRaw(initDataRaw);
     setInitSchedule(data.schedule.schedule);
     setSelectedCourse(data.schedule.course);
     setSelectedFaculty({
