@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="/favicon/favicon-32x32.png" />
     <link rel="icon" type="image/png" href="/favicon/favicon-16x16.png" />
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://telegram.org" />
     <link
       rel="preload"
       href="/assets/fonts/Montserrat-Light.woff2"
@@ -14,21 +15,11 @@
       type="font/woff2"
       crossorigin="anonymous"
     />
-    <link
-      rel="preload"
-      href="/assets/fonts/Montserrat-Regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="preload"
-      href="/assets/fonts/Montserrat-Medium.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    />
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script
+      id="telegram-web-app"
+      defer
+      src="https://telegram.org/js/telegram-web-app.js?63"
+    ></script>
     <script
       defer
       src="https://umami.rsreu-schedule.ru/script.js"
@@ -37,14 +28,29 @@
       data-exclude-hash="true"
       data-performance="true"
     ></script>
-    <script
-      defer
-      src="https://umami.rsreu-schedule.ru/recorder.js"
-      data-website-id="abec8852-bba6-4e38-a38d-3e29d7e58dbc"
-    ></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.addEventListener(
+        "load",
+        () => {
+          const loadRecorder = () => {
+            const script = document.createElement("script");
+            script.src = "https://umami.rsreu-schedule.ru/recorder.js";
+            script.dataset.websiteId = "abec8852-bba6-4e38-a38d-3e29d7e58dbc";
+            document.body.append(script);
+          };
+
+          if ("requestIdleCallback" in window) {
+            window.requestIdleCallback(loadRecorder, { timeout: 5000 });
+          } else {
+            window.setTimeout(loadRecorder, 3000);
+          }
+        },
+        { once: true }
+      );
+    </script>
   </body>
 </html>

@@ -3,6 +3,7 @@ import { initSwipeBehavior, retrieveLaunchParams } from "@telegram-apps/sdk";
 import { TelegramWebApp } from "../types/telegram";
 import { userService } from "../services/user.service";
 import { IGetUser } from "../types/auth";
+import { TelegramAuth } from "../utils/load-initial-data";
 
 export const useTelegramInit = () => {
   const setIsLoadingInit = useStore((state) => state.setIsLoadingInit);
@@ -13,11 +14,11 @@ export const useTelegramInit = () => {
   const setSelectedFaculty = useStore((state) => state.setSelectedFaculty);
   const setSelectedGroup = useStore((state) => state.setSelectedGroup);
 
-  const initializeTelegramWebApp = async () => {
-    let initDataRaw: string | undefined;
+  const initializeTelegramWebApp = async (): Promise<TelegramAuth | null> => {
     try {
+      await waitForTelegramWebApp();
       const params = getTelegramParams();
-      initDataRaw = params.initDataRaw;
+      const { initDataRaw } = params;
       const { telegramWebApp, id } = params;
 
       if (!initDataRaw || !id) {
@@ -25,10 +26,18 @@ export const useTelegramInit = () => {
       }
       setInitDataRaw(initDataRaw);
 
-      await setupTelegramApp(telegramWebApp);
+      setupTelegramApp(telegramWebApp);
+      return { id, initDataRaw };
+    } catch (error) {
+      console.log("Error initializing Telegram Web App:", error);
+      setIsLoadingInit(false);
+      return null;
+    }
+  };
 
+  const fetchUser = async (id: number, initDataRaw: string) => {
+    try {
       const data = await userService.getUser(id, initDataRaw);
-
       window.umami?.identify({
         id: `telegram:${data.telegram_id}`,
         telegram_username: data.telegram_username,
@@ -44,7 +53,22 @@ export const useTelegramInit = () => {
     } finally {
       setIsLoadingInit(false);
     }
-    return initDataRaw;
+  };
+
+  const waitForTelegramWebApp = () => {
+    if (window.Telegram?.WebApp) return Promise.resolve();
+
+    const script = document.querySelector("#telegram-web-app");
+    if (!script) return Promise.reject(new Error("Telegram SDK not found."));
+
+    return new Promise<void>((resolve, reject) => {
+      script.addEventListener("load", () => resolve(), { once: true });
+      script.addEventListener(
+        "error",
+        () => reject(new Error("Telegram SDK failed to load.")),
+        { once: true }
+      );
+    });
   };
 
   const getTelegramParams = () => {
@@ -54,7 +78,7 @@ export const useTelegramInit = () => {
     return { telegramWebApp, initDataRaw, id };
   };
 
-  const setupTelegramApp = async (telegramWebApp: TelegramWebApp) => {
+  const setupTelegramApp = (telegramWebApp: TelegramWebApp) => {
     try {
       const [swipeBehavior] = initSwipeBehavior();
       swipeBehavior.disableVerticalSwipe();
@@ -80,5 +104,5 @@ export const useTelegramInit = () => {
     });
   };
 
-  return { initializeTelegramWebApp };
+  return { initializeTelegramWebApp, fetchUser };
 };
