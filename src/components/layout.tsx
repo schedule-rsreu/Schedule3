@@ -1,6 +1,5 @@
 import React from "react";
 import cn from "classnames";
-import { Footer } from "./footer";
 import { useStore } from "../store/store";
 
 interface IProps {
@@ -29,7 +28,6 @@ export const Layout: React.FC<React.PropsWithChildren<IProps>> = ({
       ) : (
         children
       )}
-      {!isLoadingInit && !isLoadingFaculties && !isLoadingToday && <Footer />}
     </div>
   );
 };
