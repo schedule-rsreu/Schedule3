@@ -1,3 +1,11 @@
+# Schedule3
+
+Use Node.js 26.13+ (26 LTS). CI builds with --pull, runs tests, lint, npm audit and production build, smoke-tests the image, then requires zero Trivy/Grype findings before publication.
+
+TypeScript stays on 6.0.3 because current typescript-eslint supports <6.1.0. The minimatch override fixes [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) in ESLint's transitive dependencies; remove it when those packages accept the fixed major version.
+
+Tailwind 4 is compiled separately from Sass. Its [browser baseline](https://tailwindcss.com/docs/compatibility) is Safari 16.4+, Chrome 111+, Firefox 128+. Telegram integration uses the already loaded official WebApp script.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

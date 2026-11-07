@@ -1,5 +1,4 @@
 import { useStore } from "../store/store";
-import { initSwipeBehavior, retrieveLaunchParams } from "@telegram-apps/sdk";
 import { TelegramWebApp } from "../types/telegram";
 import { userService } from "../services/user.service";
 import { IGetUser } from "../types/auth";
@@ -73,15 +72,14 @@ export const useTelegramInit = () => {
 
   const getTelegramParams = () => {
     const telegramWebApp = window.Telegram.WebApp;
-    const { initDataRaw } = retrieveLaunchParams();
+    const initDataRaw = telegramWebApp.initData;
     const id = telegramWebApp.initDataUnsafe?.user?.id;
     return { telegramWebApp, initDataRaw, id };
   };
 
   const setupTelegramApp = (telegramWebApp: TelegramWebApp) => {
     try {
-      const [swipeBehavior] = initSwipeBehavior();
-      swipeBehavior.disableVerticalSwipe();
+      telegramWebApp.disableVerticalSwipes?.();
     } catch (error) {
       console.log("Update your Telegram version:", error);
     }

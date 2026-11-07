@@ -2,13 +2,12 @@ import React from "react";
 import { format } from "date-fns";
 import { useStore } from "../store/store";
 import { useSchedule } from "../hooks/useSchedule";
-import { IDays, IPair, ISchedule } from "../types/schedule";
+import { IDays, ISchedule } from "../types/schedule";
 import { Pair } from "./pair";
 import { daysOfTheWeekEn, fractionsEn } from "../constants";
 import { useCurrentPairIndex } from "../hooks/useCurrentPairIndex";
 
 export const Schedule: React.FC = () => {
-  const [schedule, setSchedule] = React.useState<IPair[]>([]);
   const lastTrackedGroup = React.useRef<string | null>(null);
   const [currentTime, setCurrentTime] = React.useState(
     format(new Date(), "HH:mm")
@@ -33,13 +32,6 @@ export const Schedule: React.FC = () => {
     initDataRaw
   );
 
-  const currentPairIndex = useCurrentPairIndex(
-    schedule,
-    currentTime,
-    selectedDayEn,
-    currentDay,
-    currentWeek
-  );
 
   React.useEffect(() => {
     const group = selectedGroup?.value;
@@ -58,7 +50,7 @@ export const Schedule: React.FC = () => {
     lastTrackedGroup.current = group;
   }, [data, groupAuth, initSchedule, selectedGroup]);
 
-  const newSchedule = React.useMemo(() => {
+  const schedule = React.useMemo(() => {
     if (data && selectedGroup && selectedGroup.value !== groupAuth) {
       return (
         data[selectedWeekEn as keyof ISchedule]?.[
@@ -86,11 +78,13 @@ export const Schedule: React.FC = () => {
     groupAuth,
   ]);
 
-  React.useEffect(() => {
-    if (JSON.stringify(schedule) !== JSON.stringify(newSchedule)) {
-      setSchedule(newSchedule);
-    }
-  }, [newSchedule]);
+  const currentPairIndex = useCurrentPairIndex(
+    schedule,
+    currentTime,
+    selectedDayEn,
+    currentDay,
+    currentWeek
+  );
 
   React.useEffect(() => {
     if (
@@ -132,7 +126,7 @@ export const Schedule: React.FC = () => {
     );
   }
 
-  if (!isLoading && schedule.length === 0 && newSchedule.length === 0) {
+  if (!isLoading && schedule.length === 0) {
     return (
       <div className="flex w-full justify-center py-[1.5rem] px-[1rem] rounded-[1rem] bg-primary mb-[.5rem]">
         <h2 className="font-normal text-[1.5rem]">В этот день нет занятий</h2>

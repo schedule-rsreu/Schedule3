@@ -17,6 +17,8 @@ export interface ThemeParams {
 }
 
 export interface TelegramWebApp {
+  initData: string;
+  disableVerticalSwipes?: () => void;
   ready: () => void;
   expand: () => void;
   initDataUnsafe: {
