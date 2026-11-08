@@ -35,7 +35,7 @@ jobs:
       - name: Collect application and exporter images
         id: images
         run: |
-          echo "images=$(ruby -ryaml -rjson -e 'puts [ENV.fetch("IMAGE"), YAML.load_file("charts/schedule3/values.yaml").fetch("metrics").fetch("image")].to_json')" >> "$GITHUB_OUTPUT"
+          echo "images=$(ruby -ryaml -rjson -e 'puts [ENV.fetch("IMAGE"), YAML.load_file("charts/schedule3/values.yaml").dig("metrics", "image")].compact.to_json')" >> "$GITHUB_OUTPUT"
 
   scan:
     name: Image security (informational)
