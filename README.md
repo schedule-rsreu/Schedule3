@@ -1,6 +1,6 @@
 # Schedule3
 
-Use Node.js 26.13+ (26 LTS). CI builds with --pull, runs tests, lint, npm audit and production build, smoke-tests the image, then requires zero Trivy/Grype findings before publication.
+Use Node.js 26.13+ (26 LTS). CI builds with --pull, runs tests, lint, npm audit and production build, smoke-tests the image, and publishes the resulting image. An independent Image security workflow scans its exact commit tag with Trivy/Grype after deployment. Findings and scan errors produce warnings and downloadable JSON reports, without blocking publication or deployment.
 
 TypeScript stays on 6.0.3 because current typescript-eslint supports <6.1.0. The minimatch override fixes [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) in ESLint's transitive dependencies; remove it when those packages accept the fixed major version.
 
