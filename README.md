@@ -75,3 +75,9 @@ Repository secrets:
 
 The Helm release serves `https://schedule.vingp.dev` and
 `https://rsreu-schedule.ru` through k3s Traefik.
+
+NGINX status listens only on `127.0.0.1:8081/stub_status` inside each pod.
+A small nginx exporter sidecar exposes Prometheus metrics on the private
+Service port `metrics` (9113); the existing monitoring opt-in scrape collects it.
+Ingress publishes only the application HTTP port. Trivy and Grype scan both
+the application and exporter images as informational checks.

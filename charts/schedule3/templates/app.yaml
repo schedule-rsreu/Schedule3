@@ -30,6 +30,24 @@ spec:
             httpGet: {path: /healthz, port: http}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        - name: nginx-exporter
+          image: {{ .Values.metrics.image | quote }}
+          args:
+            - --nginx.scrape-uri=http://127.0.0.1:8081/stub_status
+          ports:
+            - name: metrics
+              containerPort: 9113
+          readinessProbe:
+            httpGet: {path: /metrics, port: metrics}
+          resources:
+            {{- toYaml .Values.metrics.resources | nindent 12 }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
 ---
 apiVersion: v1
 kind: Service
@@ -37,6 +55,7 @@ metadata:
   name: schedule3
   labels:
     app.kubernetes.io/name: schedule3
+    metrics.vingp.dev/enabled: "true"
 spec:
   selector:
     app.kubernetes.io/name: schedule3
@@ -44,6 +63,9 @@ spec:
     - name: http
       port: 80
       targetPort: http
+    - name: metrics
+      port: 9113
+      targetPort: metrics
 {{- if .Values.ingress.enabled }}
 ---
 apiVersion: networking.k8s.io/v1

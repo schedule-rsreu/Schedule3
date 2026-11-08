@@ -5,6 +5,16 @@ image:
 
 replicas: 2
 
+metrics:
+  image: nginx/nginx-prometheus-exporter:1.5.3
+  resources:
+    requests:
+      cpu: 10m
+      memory: 16Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
 resources:
   requests:
     cpu: 10m

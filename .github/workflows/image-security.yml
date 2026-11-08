@@ -17,16 +17,36 @@ permissions:
   packages: read
 
 jobs:
-  scan:
-    name: Image security (informational)
+  images:
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event.workflow_run.conclusion == 'success' &&
        github.event.workflow_run.head_repository.full_name == github.repository &&
        github.event.workflow_run.event != 'pull_request')
     runs-on: ubuntu-latest
+    outputs:
+      images: ${{ steps.images.outputs.images }}
     env:
       IMAGE: ghcr.io/schedule-rsreu/schedule3:${{ github.event.workflow_run.head_sha || inputs.tag }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || inputs.tag }}
+      - name: Collect application and exporter images
+        id: images
+        run: |
+          echo "images=$(ruby -ryaml -rjson -e 'puts [ENV.fetch("IMAGE"), YAML.load_file("charts/schedule3/values.yaml").dig("metrics", "image")].compact.to_json')" >> "$GITHUB_OUTPUT"
+
+  scan:
+    name: Image security (informational)
+    needs: images
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ${{ fromJSON(needs.images.outputs.images) }}
+    env:
+      IMAGE: ${{ matrix.image }}
     steps:
       - name: Login to GHCR
         id: login
@@ -77,7 +97,7 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@v7.0.2
         with:
-          name: image-security-reports
+          name: image-security-reports-${{ strategy.job-index }}
           path: |
             trivy.json
             grype.json
