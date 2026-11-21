@@ -1,4 +1,4 @@
-ARG NGINX_IMAGE=ghcr.io/schedule-rsreu/nginx:latest
+ARG NGINX_IMAGE=ghcr.io/schedule-rsreu/nginx:996de2b7726a1a758b8d7e5e16c6532437b76ca1
 FROM node:26-alpine3.24 AS builder
 
 WORKDIR /app
